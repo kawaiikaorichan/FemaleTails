@@ -11,5 +11,8 @@
 #include "framework.h"
 #include "SADXModLoader.h"
 #include "Trampoline.h"
+#include "ModelInfo.h"
+#include "AnimationFile.h"
+#include "GUI.h"
 
 #endif //PCH_H
