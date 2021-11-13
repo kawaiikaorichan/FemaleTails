@@ -2,6 +2,7 @@
 #include "Tails.h"
 #include "Events.h"
 #include "FieldUpgrades.h"
+#include "lanternapi.h"
 #include "cmath"
 
 #define ReplacePVM(a, b) helperFunctions.ReplaceFile("system\\" a ".PVM", "system\\" b ".PVM");
@@ -691,6 +692,140 @@ void __cdecl InitNPCTailsWeldInfo_mod()
 	NPCTailsWeldInfo[24].VertIndexes = 0;
 }
 
+NJS_MATERIAL* Specular1[] = {
+	&material_8D9A3AD59B801E09402[0],
+	&material_8D9A3AD59B801E09402[1],
+	&material_8D9A3AD59B801E09402[2],
+	&material_8D9A3AD59B801E09402[3],
+	&material_8D9A3AD59B801E09402[4],
+	&material_8D9A3AD72768CB60585[0],
+	&material_8D9A3AD72768CB60585[1],
+	&material_8D9A3AD72768CB60585[2],
+	&material_8D9A3AD72768CB60585[3],
+	&material_8D9A3AD72768CB60585[4],
+};
+
+NJS_MATERIAL* Specular3[] = {
+	&material_8D9A38DB7F6FD99F033[0],
+	&material_8D9A38DB7F6FD99F033[1],
+	&material_8D9A38DB7F6FD99F033[2],
+	&material_8D9A38DB7F6FD99F033[3],
+	&material_8D9A38DB7F6FD99F033[4],
+	&material_8D9A38DB7F6FD99F033[5],
+	&material_8D9A38DB7F6FD99F033[6],
+	&material_8D9A38DB7F6FD99F033[7],
+	&material_8D9A38DB7F6FD99F033[8],
+	&material_8D9A38DB7F6FD99F033[9],
+	&material_8D9A38DB7F6FD99F033[10],
+	&material_8D9A38DB7F6FD99F033[11],
+	&material_8D9A38DB7F6FD99F033[12],
+	&material_8D9A38DC2BCF3008643[0],
+	&material_8D9A38DC9CFA6762473[0],
+	&material_8D9A38DD0DD7EF22356[0],
+	&material_8D9A38DD6B601FC07FE[0],
+	&material_8D9A61D7E0860918219[0],
+	&material_8D9A61D7E0860918219[1],
+	&material_8D9A61D7E0860918219[2],
+	&material_8D9A61D7E0860918219[3],
+	&material_8D9A61D7E0860918219[4],
+	&material_8D9A61D7E0860918219[5],
+	&material_8D9A61D7E0860918219[6],
+	&material_8D9A61D7E0860918219[7],
+	&material_8D9A61D7E0860918219[8],
+	&material_8D9A61D7E0860918219[9],
+	&matlist_02F37A50[0],
+	&matlist_02F37A50[3],
+	&matlist_02F37A50[5],
+	&matlist_02F37A50[9],
+	&matlist_02F36AE8[0],
+	&matlist_02F36AE8[1],
+	&matlist_02F36AE8[2],
+	&matlist_02F36AE8[3],
+};
+
+bool ForceDiffuse0Specular1(NJS_MATERIAL* material, Uint32 flags)
+{
+	set_diffuse(0, false);
+	set_specular(1, false);
+	return true;
+}
+
+bool ForceDiffuse0Specular0_Tails(NJS_MATERIAL* material, Uint32 flags)
+{
+	if (CurrentLevel == 1 && CurrentAct == 1 && TailsAI_ptr == nullptr && EV_MainThread_ptr == nullptr)
+	{
+		set_diffuse(0, false);
+		set_specular(0, false);
+	}
+	else
+	{
+		set_diffuse(2, false);
+		set_specular(2, false);
+	}
+	return true;
+}
+
+bool ForceDiffuse0Specular1_Tails(NJS_MATERIAL* material, Uint32 flags)
+{
+	if (CurrentLevel == 1 && CurrentAct == 1 && TailsAI_ptr == nullptr && EV_MainThread_ptr == nullptr)
+	{
+		set_diffuse(0, false);
+		set_specular(1, false);
+	}
+	else
+	{
+		set_diffuse(2, false);
+		set_specular(3, false);
+	}
+	return true;
+}
+
+bool ForceDiffuse2Specular2(NJS_MATERIAL* material, Uint32 flags)
+{
+	set_diffuse(2, false);
+	set_specular(2, false);
+	return true;
+}
+
+bool ForceDiffuse2Specular3(NJS_MATERIAL* material, Uint32 flags)
+{
+	set_diffuse(2, false);
+	set_specular(3, false);
+	return true;
+}
+
+void ForceDiffuse2Specular2_Object(NJS_OBJECT* obj)
+{
+	if (obj->basicdxmodel)
+	{
+		for (int q = 0; q < obj->basicdxmodel->nbMat; ++q)
+		{
+			if (!(obj->basicdxmodel->mats[q].attrflags & NJD_FLAG_IGNORE_LIGHT))
+			{
+				TemporaryMaterialArray[0] = &obj->basicdxmodel->mats[q];
+				material_register(TemporaryMaterialArray, 1, ForceDiffuse2Specular2);
+			}
+		}
+	}
+	if (obj->child) ForceDiffuse2Specular2_Object(obj->child);
+	if (obj->sibling) ForceDiffuse2Specular2_Object(obj->sibling);
+}
+
+void RemoveMaterialColors(NJS_OBJECT* obj)
+{
+	if (obj->basicdxmodel)
+	{
+		for (int q = 0; q < obj->basicdxmodel->nbMat; ++q)
+		{
+			obj->basicdxmodel->mats[q].diffuse.argb.r = 0xFF;
+			obj->basicdxmodel->mats[q].diffuse.argb.g = 0xFF;
+			obj->basicdxmodel->mats[q].diffuse.argb.b = 0xFF;
+		}
+	}
+	if (obj->child) RemoveMaterialColors(obj->child);
+	if (obj->sibling) RemoveMaterialColors(obj->sibling);
+}
+
 void Init_Tails()
 {
 	MILES_OBJECTS[0] = &object_0042AD54;
@@ -877,19 +1012,27 @@ void Init_Tails()
 	MILES_MODELS[13] = &attach_004463D8;
 	MILES_MODELS[14] = &attach_0046DFE8;
 	MILES_MOTIONS[0] = &___MILES_MOTIONS_0;
-	WriteData((NJS_OBJECT**)0x7D2186, &object_02707A74);
+	WriteData((NJS_OBJECT**)0x7D2186, &object_02707A74); //Jet Anklet model
 	WriteJump((void*)0x007C6D80, InitTailsWeldInfo_mod);
 	WriteJump((void*)0x007C7560, InitNPCTailsWeldInfo_mod);
-	WriteData((NJS_OBJECT**)0x03175528, &object_02D75528);
-	WriteData((NJS_OBJECT**)0x03342074, &object_02F3A0D0);
+	//Material fixes for "Watch out! You're gonna crash! AH!" (Thanks IEA)
+	RemoveMaterialColors((NJS_OBJECT*)0x3175528); //Tails' model
+	((NJS_OBJECT*)0x317178C)->basicdxmodel->mats[1].attrflags &= ~NJD_FLAG_USE_ALPHA; //Unnecessary alpha in Tails' arm
+	((NJS_OBJECT*)0x31708E4)->basicdxmodel->mats[1].attrflags &= ~NJD_FLAG_USE_ALPHA; //Unnecessary alpha in Tails' arm
+	((NJS_OBJECT*)0x31793C0)->basicdxmodel->mats[3].attrflags &= ~NJD_FLAG_IGNORE_SPECULAR; //Plane
+	((NJS_OBJECT*)0x31793C0)->basicdxmodel->mats[5].attrflags &= ~NJD_FLAG_IGNORE_SPECULAR; //Plane
+	((NJS_OBJECT*)0x31793C0)->basicdxmodel->mats[9].attrflags &= ~NJD_FLAG_IGNORE_SPECULAR; //Plane
+	//Intro prototype
+	WriteData((NJS_OBJECT**)0x03175528, &object_02D75528); //Tails from Sonic story
+	WriteData((NJS_OBJECT**)0x03342074, &object_02F3A0D0); //Plane
 	WriteData((NJS_OBJECT**)0x03344EAC, &object_02F3A0D0);
 	WriteData((NJS_OBJECT**)0x03347734, &object_02F3A0D0);
 	WriteData((NJS_OBJECT**)0x0334A8FC, &object_02F3A0D0);
-	WriteData((NJS_OBJECT**)0x006F9483, &object_02F3F0E4);
+	WriteData((NJS_OBJECT**)0x006F9483, &object_02F3F0E4); //Event head
 	WriteData((NJS_OBJECT**)0x0334A910, &object_02F3F0E4);
 	WriteData((NJS_OBJECT**)0x0334A924, &object_02F3F0E4);
 	WriteData((NJS_OBJECT**)0x0334A938, &object_02F3F0E4);
-	WriteData((NJS_MOTION**)0x03375D88, &motion_000395C4);
+	WriteData((NJS_MOTION**)0x03375D88, &motion_000395C4); //Event head motions
 	WriteData((NJS_MOTION**)0x03375D98, &motion_0002E9C8);
 	WriteData((NJS_MOTION**)0x03375DA8, &motion_0002E9C8);
 	WriteData((NJS_MOTION**)0x03375DB8, &motion_0002602C);
@@ -901,6 +1044,7 @@ extern "C"
 	{
 		HMODULE handle = GetModuleHandle(L"CHRMODELS_orig");
 		HMODULE adv03dll = GetModuleHandle(L"ADV03MODELS");
+		HMODULE Lantern = GetModuleHandle(L"sadx-dc-lighting");
 		NJS_OBJECT** ___MILES_OBJECTS = (NJS_OBJECT**)GetProcAddress(handle, "___MILES_OBJECTS");
 		NJS_ACTION** ___MILES_ACTIONS = (NJS_ACTION**)GetProcAddress(handle, "___MILES_ACTIONS");
 		NJS_MODEL_SADX** ___MILES_MODELS = (NJS_MODEL_SADX**)GetProcAddress(handle, "___MILES_MODELS");
@@ -915,6 +1059,11 @@ extern "C"
 		___MILES_MODELS[12]->mats[2].attr_texId = 17;
 		Init_Tails();
 		Icons_Init();
+		if (Lantern != nullptr)
+		{
+			material_register(Specular1, LengthOfArray(Specular1), &ForceDiffuse0Specular1);
+			material_register(Specular3, LengthOfArray(Specular3), &ForceDiffuse2Specular3);
+		}
 		ReplacePVM("Miles", "OnnaTails");
 		ReplacePVM("m_head_1", "ProtoHead");
 		ReplacePVM("m_tr_p", "ProtoTornado");

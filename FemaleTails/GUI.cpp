@@ -1,7 +1,7 @@
 #include "pch.h"
 
-static Trampoline* LoadRegObjTextures_t = nullptr;
-static Trampoline* FreeRegObjTexlists_t = nullptr;
+Trampoline* LoadRegObjTextures_t = nullptr;
+Trampoline* FreeRegObjTexlists_t = nullptr;
 
 static NJS_TEXNAME MILLIEGUI_TEXNAME[2] = {};
 static NJS_TEXLIST MILLIEGUI_TEXLIST = { arrayptrandlengthT(MILLIEGUI_TEXNAME, int) };
