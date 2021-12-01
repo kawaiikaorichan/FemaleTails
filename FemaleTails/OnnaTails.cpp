@@ -1064,7 +1064,7 @@ extern "C"
 			material_register(Specular1, LengthOfArray(Specular1), &ForceDiffuse0Specular1);
 			material_register(Specular3, LengthOfArray(Specular3), &ForceDiffuse2Specular3);
 		}
-		ReplacePVM("Miles", "OnnaTails");
+		ReplacePVM("Miles", "Millie");
 		ReplacePVM("m_head_1", "ProtoHead");
 		ReplacePVM("m_tr_p", "ProtoTornado");
 		ReplacePVM("ev_s_t2c_body", "SonicEVProtoTornado");
