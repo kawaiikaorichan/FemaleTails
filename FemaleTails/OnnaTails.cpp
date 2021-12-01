@@ -743,6 +743,54 @@ NJS_MATERIAL* Specular3[] = {
 	&matlist_02F36AE8[3],
 };
 
+NJS_MATERIAL* TailsBody[] = {
+	&material_8D9A5E8B0F321AF1319[0],
+	&material_8D9A5E8B0F321AF1319[1],
+	&material_8D9A5E8B0F321AF1319[2],
+	&material_8D9A5E8B0F321AF1319[3],
+	&material_8D9A5E8B0F321AF1319[4],
+	&material_8D9A5E8B0F321AF1319[5],
+	&material_8D9A5E8B0F321AF1319[6],
+	&material_8D9A5E8B0F321AF1319[7],
+};
+
+NJS_MATERIAL* TailsShoes[] = {
+	&material_8D935D7C4FE3FB3D443[0],
+	&material_8D935D7C4FE3FB3D443[1],
+	&material_8D935D7D1C1A0DCCCC2[0],
+	&material_8D935D7D1C1A0DCCCC2[1],
+	&material_8D935D7CADE8B0B915E[0],
+	&material_8D935D7CADE8B0B915E[1],
+	&material_8D935D7D63688ADB9A9[0],
+	&material_8D935D7D63688ADB9A9[1],
+	&material_8D9A3E1EC315EED4C4C[0],
+	&material_8D9A3E1EC315EED4C4C[1],
+	&material_8D9A3E1F8B51A0D945E[0],
+	&material_8D9A3E1F8B51A0D945E[1],
+	&material_8D9A3E1F1B75781E151[0],
+	&material_8D9A3E1F1B75781E151[1],
+	&material_8D9A3E1FE89C9A8654C[0],
+	&material_8D9A3E1FE89C9A8654C[1],
+	&matlist_0046E670[0],
+	&matlist_0046E670[1],
+	&matlist_0046E670[2],
+	&matlist_0046E670[3],
+	&matlist_0046E670[4],
+	&matlist_0046E670[5],
+	&matlist_0046E670[6],
+	&matlist_0046E048[0],
+	&matlist_0046E048[1],
+	&matlist_0046F4A0[0],
+	&matlist_0046F4A0[1],
+	&matlist_0046F4A0[2],
+	&matlist_0046F4A0[3],
+	&matlist_0046F4A0[4],
+	&matlist_0046F4A0[5],
+	&matlist_0046F4A0[6],
+	&matlist_0046EE78[0],
+	&matlist_0046EE78[1],
+};
+
 bool ForceDiffuse0Specular1(NJS_MATERIAL* material, Uint32 flags)
 {
 	set_diffuse(0, false);
@@ -1063,6 +1111,8 @@ extern "C"
 		{
 			material_register(Specular1, LengthOfArray(Specular1), &ForceDiffuse0Specular1);
 			material_register(Specular3, LengthOfArray(Specular3), &ForceDiffuse2Specular3);
+			material_register(TailsBody, LengthOfArray(TailsBody), &ForceDiffuse0Specular0_Tails);
+			material_register(TailsShoes, LengthOfArray(TailsShoes), &ForceDiffuse0Specular1_Tails);
 		}
 		ReplacePVM("Miles", "Millie");
 		ReplacePVM("m_head_1", "ProtoHead");
